@@ -26,6 +26,26 @@ public class CachingBreedFetcher implements BreedFetcher {
         this.fetcher = fetcher;
     }
 
+    @Override
+    public List<String> getSubBreeds(String breed) throws BreedNotFoundException {
+        //Return the result of the cashe
+        if (cache.containsKey(breed)) {
+            return cache.get(breed);
+        }
 
+        // if not we get from the backend and call again
+        callsMade++;
+        List<String> subBreeds = fetcher.getSubBreeds(breed);
+
+        // Save the new result in the cache
+        cache.put(breed, subBreeds);
+
+        // Return the list
+        return subBreeds;
+    }
+
+    public int getCallsMade() {
+        // Return how many times a backend fetches happenned
+        return callsMade;
     }
 }
