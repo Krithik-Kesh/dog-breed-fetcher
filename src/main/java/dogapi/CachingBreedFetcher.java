@@ -16,10 +16,8 @@ public class CachingBreedFetcher implements BreedFetcher {
     // The BreedFetcher used to actually retrieve data
     private final BreedFetcher fetcher;
 
-    // Stores the previous data
+    // Stores the previous data and tracks the backend instead of the cache
     private final Map<String, List<String>> cache = new HashMap<>();
-
-    // Tracks the backend instead of the cache
     private int callsMade = 0;
 
     public CachingBreedFetcher(BreedFetcher fetcher) {
@@ -32,14 +30,11 @@ public class CachingBreedFetcher implements BreedFetcher {
         if (cache.containsKey(breed)) {
             return cache.get(breed);
         }
-
         // if not we get from the backend and call again
         callsMade++;
         List<String> subBreeds = fetcher.getSubBreeds(breed);
-
         // Save the new result in the cache
         cache.put(breed, subBreeds);
-
         // Return the list
         return subBreeds;
     }

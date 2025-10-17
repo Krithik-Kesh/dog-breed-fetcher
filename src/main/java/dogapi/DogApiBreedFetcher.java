@@ -37,24 +37,19 @@ public class DogApiBreedFetcher implements BreedFetcher {
             if (response.body() == null || !response.isSuccessful()) {
                 throw new BreedNotFoundException("Couldn't reach the api" + breed);
             }
-
             // Cut up the body
             JSONObject json = new JSONObject(response.body().string());
-
             // If the status is anything else than success there is no breed found
             if (!json.optString("status").equals("success")) {
                 throw new BreedNotFoundException("No Breed, " + breed);
             }
-
             // Get the Sub Breeeds
             JSONArray subBreedsJson = json.getJSONArray("message");
             List<String> subBreeds = new ArrayList<>();
             for (Object obj : subBreedsJson) {
                 subBreeds.add(obj.toString());
             }
-
             return subBreeds;
-
             //If there are any network issues
         } catch (IOException e) {
             throw new BreedNotFoundException("Network error:" + breed);

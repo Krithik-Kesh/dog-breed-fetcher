@@ -20,7 +20,7 @@ public interface BreedFetcher {
     // a class defined in an interface is public AND static
     class BreedNotFoundException extends RuntimeException {
         public BreedNotFoundException(String breed) {
-            super("Breed not found: " + breed);
+            super(breed + "is not a breed");
         }
     }
 }
